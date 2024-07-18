@@ -83,6 +83,7 @@ class FixPriceSpider(scrapy.Spider):
 
         product_details = response.json()
         loader = FixPriceItemLoader(item=FixPriceItem(), selector=None, response=response)
+
         loader.context['url_catalog'] = self.URL_CATALOG
         loader.context['menu'] = self.menu
         loader.context['special_price'] = product_details.get('specialPrice')
@@ -93,46 +94,16 @@ class FixPriceSpider(scrapy.Spider):
         loader.context['code'] = product_details.get('id')
         loader.context['product_properties'] = product_details.get('properties')
 
-        loader.add_value(
-            'RPC',
-            product_details.get('id')
-        )
-        loader.add_value(
-            'url',
-            product_details.get('url')
-        )
-        loader.add_value(
-            'section',
-            kwargs.get('category')
-        )
-        loader.add_value(
-            'brand',
-            product_details.get('brand')
-        )
-        loader.add_value(
-            'price_data',
-            kwargs.get('price')
-        )
-        loader.add_value(
-            'variants',
-            product_details.get('variants')
-        )
-        loader.add_value(
-            'stock',
-            kwargs.get('in_stock')
-        )
-        loader.add_value(
-            'assets',
-            product_details.get('images')
-        )
-        loader.add_value(
-            'metadata',
-            product_details.get('description')
-        )
-        loader.add_value(
-            'title',
-            product_details.get('title')
-        )
+        loader.add_value('RPC', product_details.get('id'))
+        loader.add_value('url', product_details.get('url'))
+        loader.add_value('section', kwargs.get('category'))
+        loader.add_value('brand', product_details.get('brand'))
+        loader.add_value('price_data', kwargs.get('price'))
+        loader.add_value('variants', product_details.get('variants'))
+        loader.add_value('stock', kwargs.get('in_stock'))
+        loader.add_value('assets', product_details.get('images'))
+        loader.add_value('metadata', product_details.get('description'))
+        loader.add_value('title', product_details.get('title'))
 
         item = loader.load_item()
 
@@ -144,4 +115,3 @@ class FixPriceSpider(scrapy.Spider):
 
     def _get_category_from_url(self, url):
         return re.sub(self.URL_CATALOG, '', url)
-
